@@ -1,0 +1,17 @@
+{
+  "name": "the-noun-game",
+  "version": "0.0.1",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "the-noun-project": "^2.0.1"
+  },
+  "engines": {
+    "node": "8.6.x"
+  },
+  "license": "MIT"
+}

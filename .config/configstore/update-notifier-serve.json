@@ -1,0 +1,10 @@
+{
+	"optOut": false,
+	"lastUpdateCheck": 1499782708058,
+	"update": {
+		"latest": "6.0.2",
+		"current": "5.2.2",
+		"type": "major",
+		"name": "serve"
+	}
+}
