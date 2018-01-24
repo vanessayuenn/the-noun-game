@@ -2,3 +2,7 @@ body {
   font-family: 'Magra', sans-serif;
   background: floralwhite;
 }
+
+span.blank:before {
+  content: "\200b";
+}
