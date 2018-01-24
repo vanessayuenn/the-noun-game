@@ -1,7 +1,3 @@
-# Getting Started with VueJS
+# The Noun Game
 
-The Progressive JavaScript Framework
-
-> Remix this project as a default template for VueJS
-
-https://vuejs.org/
+Simple icon guessing game using icons from [The Noun Project](https://thenounproject.com).
