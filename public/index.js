@@ -6,10 +6,10 @@ const app = new Vue({
   data: {
     icon: {},
     iconNext: {},
-    msg: '',
-    started: false,
+    isGameover: false,
+    isStarted: false,
     score: 0,
-    time: 180,
+    time: 10,
     answer: []
   },
 
@@ -37,7 +37,7 @@ const app = new Vue({
 
     checkKey: function (e) {
       switch (true) {
-        case (e.keyCode === 8):    // backspace
+        case (e.keyCode === 8):     // backspace
           const del = this.answer.pop()
           if (del === ' ') {
             this.answer.pop()
@@ -46,10 +46,15 @@ const app = new Vue({
         case (e.keyCode === 13):    // enter
           this.nextRound()
           break
-        case (e.keyCode === 32):
-          this.startGame()
+        case (e.keyCode === 32):    // space
+          if (this.isGameover) {
+            this.restart()
+          } else {
+            this.startGame()
+          }
           break
-        case (e.keyCode > 47 && e.keyCode < 91 && this.answer.length < this.icon.term.length):
+        case (e.keyCode > 47 && e.keyCode < 91      // alphanumerical keys
+              && this.answer.length < this.icon.term.length):
           if (this.icon.term[this.answer.length] === ' ') {
             this.answer.push(' ')
           }
@@ -65,12 +70,11 @@ const app = new Vue({
     },
 
     startGame: function () {
-      if (this.started) {
+      if (this.isStarted) {
         return
       }
-      this.started = true
+      this.isStarted = true
       const timer = setInterval(() => {
-        console.log(this.time)
         if (--this.time === 0) {
           clearInterval(timer)
           this.gameOver()
@@ -78,8 +82,20 @@ const app = new Vue({
       }, 1000)
     },
 
+    restart: function() {
+      Object.assign(this, {
+        isGameover: false,
+        score: 0,
+        time: 10,
+        answer: []
+      })
+      this.nextRound()
+      this.startGame()
+    },
+
     gameOver: function () {
-      this.started = false
+      this.isStarted = false
+      this.isGameover = true
     },
 
     checkAnswer: function () {
@@ -101,7 +117,8 @@ const app = new Vue({
 
   template: `
     <div class="vh-100 flex flex-column items-center justify-center">
-      <div :class="{flex: started}" class="dn flex-column items-center pa4 mw6 w-100 w-50-ns">
+      <div class="container flex flex-column items-center justify-between pa4 mw6 w-100 w-50-ns relative overflow-hidden">
+        <cover :isStarted=isStarted :isGameover=isGameover :score=score></cover>
         <guess :term=icon.term :answer=answer></guess>
         <img class="mv2" :src=icon.preview_url />
         <img class="dn" :src=iconNext.preview_url />
@@ -124,7 +141,8 @@ Vue.component('guess', {
     },
 
     isCorrect: function (i) {
-      return i >= this.answer.length || this.term[i].toLowerCase() === this.answer[i].toLowerCase()
+      return i >= this.answer.length
+            || this.term[i].toLowerCase() === this.answer[i].toLowerCase()
     }
   },
 
@@ -156,6 +174,26 @@ Vue.component('dashboard', {
     <div class="flex justify-between mt4 w-100">
       <h2>Score: {{ score }}</h2>
       <h2>{{ time | formatTime }}</h2>
+    </div>
+  `
+})
+
+Vue.component('cover', {
+  props: ['isStarted', 'isGameover', 'score'],
+
+  computed: {
+    message: function() {
+      if (!this.isGameover) {
+        return `Press space to start<br />Press enter to skip`
+      } else {
+        return `Fin.<br />Score: ${this.score}`
+      }
+    }
+  },
+
+  template: `
+    <div :class="{hidden: isStarted}" class="cover flex items-center tc justify-center aspect-ratio--object w-100 overflow-hidden">
+      <h3 :class="{dn: isStarted}" class="tracked lh-title" v-html=message></h3>
     </div>
   `
 })

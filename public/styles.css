@@ -6,3 +6,12 @@ body {
 span.blank:before {
   content: "\200b";
 }
+
+.cover {
+  background-color: floralwhite;
+  transition: height ease 0.5s;
+}
+
+.cover.hidden {
+  height: 0;
+}
