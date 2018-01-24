@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express')
 const path = require('path')
 const NounProject = require('the-noun-project')
@@ -34,6 +36,6 @@ app.get('/icon', (req, res) => {
   handler(0)
 })
 
-const listener = app.listen(process.env.PORT, () => {
+const listener = app.listen(process.env.PORT || 3000, () => {
   console.log(`Your app is listening on port ${listener.address().port}`)
 })

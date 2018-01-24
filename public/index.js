@@ -6,6 +6,7 @@ const app = new Vue({
   data: {
     icon: {},
     iconNext: {},
+    msg: '',
     started: false,
     score: 0,
     time: 180,
@@ -26,12 +27,12 @@ const app = new Vue({
 
     fetchIcon: function () {
       return fetch('/icon')
-             .then((data) => data.json())
-             .then((data) => {
+            .then((data) => data.json())
+            .then((data) => {
               let { term, preview_url } = data.icon
               term = term.trim()
               return { term, preview_url }
-             })
+            })
     },
 
     checkKey: function (e) {
