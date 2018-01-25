@@ -129,7 +129,7 @@ const app = new Vue({
         <img class="dn" :src=iconNext.preview_url />
         <dashboard :score=score :time=time></dashboard>
       </div>
-      <div class="flex justify-end ph3 w-100 w-50-ns">
+      <div class="flex justify-end ph3 w-100 w-50-ns mw6">
         <a href="https://github.com/vanessayuenn/the-noun-game" class="mh1 no-underline link black-20">gh</a>
         <a href="https://www.twitter.com/vanessayuenn" class="mh1 no-underline link black-20">tw</a>
       </div>
