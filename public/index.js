@@ -53,8 +53,8 @@ const app = new Vue({
             this.startGame()
           }
           break
-        case (e.keyCode > 47 && e.keyCode < 91      // alphanumerical keys
-              && this.answer.length < this.icon.term.length):
+        case (e.keyCode > 47 && e.keyCode < 91 &&      // alphanumerical keys
+              this.answer.length < this.icon.term.length):
           if (this.icon.term[this.answer.length] === ' ') {
             this.answer.push(' ')
           }
@@ -82,7 +82,7 @@ const app = new Vue({
       }, 1000)
     },
 
-    restart: function() {
+    restart: function () {
       Object.assign(this, {
         isGameover: false,
         score: 0,
@@ -117,12 +117,16 @@ const app = new Vue({
 
   template: `
     <div class="vh-100 flex flex-column items-center justify-center">
-      <div class="container flex flex-column items-center justify-between pa4 mw6 w-100 w-50-ns relative overflow-hidden">
+      <div class="flex flex-column items-center justify-between pa3 mw6 w-100 w-50-ns relative overflow-hidden">
         <cover :isStarted=isStarted :isGameover=isGameover :score=score></cover>
         <guess :term=icon.term :answer=answer></guess>
         <img class="mv2" :src=icon.preview_url />
         <img class="dn" :src=iconNext.preview_url />
         <dashboard :score=score :time=time></dashboard>
+      </div>
+      <div class="flex justify-end ph3 w-100 w-50-ns">
+        <a href="https://github.com/vanessayuenn/the-noun-game" class="mh1 no-underline link black-20">gh</a>
+        <a href="https://www.twitter.com/vanessayuenn" class="mh1 no-underline link black-20">tw</a>
       </div>
     </div>
   `
@@ -141,8 +145,8 @@ Vue.component('guess', {
     },
 
     isCorrect: function (i) {
-      return i >= this.answer.length
-            || this.term[i].toLowerCase() === this.answer[i].toLowerCase()
+      return i >= this.answer.length ||
+            this.term[i].toLowerCase() === this.answer[i].toLowerCase()
     }
   },
 
@@ -182,7 +186,7 @@ Vue.component('cover', {
   props: ['isStarted', 'isGameover', 'score'],
 
   computed: {
-    message: function() {
+    message: function () {
       if (!this.isGameover) {
         return `Press space to start<br />Press enter to skip`
       } else {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "standard --fix"
   },
   "dependencies": {
     "dotenv": "^4.0.0",
