@@ -9,8 +9,9 @@ const app = new Vue({
     isGameover: false,
     isStarted: false,
     score: 0,
-    time: 10,
-    answer: []
+    time: 180,
+    answer: [],
+    showAnswer: false
   },
 
   created: function () {
@@ -44,7 +45,11 @@ const app = new Vue({
           }
           break
         case (e.keyCode === 13):    // enter
-          this.nextRound()
+          this.showAnswer = true
+          setTimeout(() => {
+            this.showAnswer = false
+            this.nextRound()
+          }, 300)
           break
         case (e.keyCode === 32):    // space
           if (this.isGameover) {
@@ -86,7 +91,7 @@ const app = new Vue({
       Object.assign(this, {
         isGameover: false,
         score: 0,
-        time: 10,
+        time: 180,
         answer: []
       })
       this.nextRound()
@@ -119,7 +124,7 @@ const app = new Vue({
     <div class="vh-100 flex flex-column items-center justify-center">
       <div class="flex flex-column items-center justify-between pa3 mw6 w-100 w-50-ns relative overflow-hidden">
         <cover :isStarted=isStarted :isGameover=isGameover :score=score></cover>
-        <guess :term=icon.term :answer=answer></guess>
+        <guess :term=icon.term :answer=answer :showAnswer=showAnswer></guess>
         <img class="mv2" :src=icon.preview_url />
         <img class="dn" :src=iconNext.preview_url />
         <dashboard :score=score :time=time></dashboard>
@@ -133,15 +138,17 @@ const app = new Vue({
 })
 
 Vue.component('guess', {
-  props: ['term', 'answer'],
+  props: ['term', 'answer', 'showAnswer'],
 
   methods: {
     outputAnswer: function (i) {
+      if (this.showAnswer) {
+        return this.term[i].toUpperCase()
+      }
       if (i >= this.answer.length) {
         return ''
-      } else {
-        return this.answer[i]
       }
+      return this.answer[i]
     },
 
     isCorrect: function (i) {
@@ -155,7 +162,7 @@ Vue.component('guess', {
       <span
        v-for="(char, i) in term"
        class="w1 dib mh1 bw2 blank nowrap tc"
-       :class="{bb: char !== ' ', red: !isCorrect(i)}"
+       :class="{bb: char !== ' ', red: !isCorrect(i) || showAnswer}"
       >{{ outputAnswer(i) }}
       </span>
     </h2>
