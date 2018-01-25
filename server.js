@@ -29,7 +29,7 @@ app.get('/icon', (req, res) => {
         }
       })
     } else {
-      res.status(500)
+      res.status(500).json({error: 'Maximum retry exceeded.'})
     }
   }
 

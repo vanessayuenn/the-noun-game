@@ -11,7 +11,8 @@ const app = new Vue({
     score: 0,
     time: 180,
     answer: [],
-    showAnswer: false
+    showAnswer: false,
+    error: null
   },
 
   created: function () {
@@ -28,15 +29,21 @@ const app = new Vue({
 
     fetchIcon: function () {
       return fetch('/icon')
-            .then((data) => data.json())
+            .then((res) => res.json())
             .then((data) => {
+              if (!data.icon) {
+                throw new Error('not ok')
+              }
               let { term, preview_url } = data.icon
               term = term.trim()
               return { term, preview_url }
             })
+            .catch((error) => this.error = error)
     },
 
     checkKey: function (e) {
+      if (this.error) return
+
       switch (true) {
         case (e.keyCode === 8):     // backspace
           const del = this.answer.pop()
@@ -68,16 +75,14 @@ const app = new Vue({
         default:
           break
       }
-
       if (this.answer.length === this.icon.term.length) {
         this.checkAnswer()
       }
     },
 
     startGame: function () {
-      if (this.isStarted) {
-        return
-      }
+      if (this.isStarted) return
+
       this.isStarted = true
       const timer = setInterval(() => {
         if (--this.time === 0) {
@@ -123,8 +128,17 @@ const app = new Vue({
   template: `
     <div class="vh-100 flex flex-column items-center justify-center">
       <div class="flex flex-column items-center justify-between pa3 mw6 w-100 w-50-ns relative overflow-hidden">
-        <cover :isStarted=isStarted :isGameover=isGameover :score=score></cover>
-        <guess :term=icon.term :answer=answer :showAnswer=showAnswer></guess>
+        <cover
+         :isStarted=isStarted
+         :isGameover=isGameover
+         :score=score
+         :error=error
+        ></cover>
+        <guess
+         :term=icon.term
+         :answer=answer
+         :showAnswer=showAnswer
+        ></guess>
         <img class="mv2" :src=icon.preview_url />
         <img class="dn" :src=iconNext.preview_url />
         <dashboard :score=score :time=time></dashboard>
@@ -190,10 +204,13 @@ Vue.component('dashboard', {
 })
 
 Vue.component('cover', {
-  props: ['isStarted', 'isGameover', 'score'],
+  props: ['isStarted', 'isGameover', 'score', 'error'],
 
   computed: {
     message: function () {
+      if (this.error) {
+        return 'Sorry!<br />Something went wrong.'
+      }
       if (!this.isGameover) {
         return `Press space to start<br />Press enter to skip`
       } else {
