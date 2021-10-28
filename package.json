@@ -4,10 +4,13 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "standard --fix"
   },
   "dependencies": {
+    "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "standard": "^10.0.3",
     "the-noun-project": "^2.0.1"
   },
   "engines": {
